@@ -6,7 +6,8 @@ own copy of Minecraft: Java Edition 26.3, like the desktop build.
 
 ## Install and play
 
-1. Install the arm64-v8a APK (Android 9 / API 28 or newer).
+1. Install the arm64-v8a APK (Android 9 / API 28 or newer). The rolling
+   `android-latest` prerelease always carries the newest main build.
 2. On a computer, prepare the 26.3 game files with `horizon-prepare` from this
    repository, then zip the resulting `horizon-resources` folder.
 3. Open Horizon, choose **Import prepared resources (.zip)** and select the ZIP.

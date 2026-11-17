@@ -203,15 +203,40 @@ jobs:
           Complete the task to the best of your ability.
           EOF
           )"
+          # A cancelled job never reaches its later "if: always()" steps, so a
+          # snapshot at the end of this job cannot save the work. Save it while
+          # the agent runs instead, and save once more on the way out.
+          python3 tools/opencode_autosave.py loop \
+              --interval 120 \
+              --branch "$DEFAULT_BRANCH" \
+              --recovery-branch "agent-recovery/issue-${ISSUE_NUMBER}" \
+              > .agent-work/logs/autosave.log 2>&1 &
+          autosave_pid=$!
+          cleanup() {
+            trap - EXIT INT TERM
+            kill "$autosave_pid" 2>/dev/null || true
+            wait "$autosave_pid" 2>/dev/null || true
+            python3 tools/opencode_autosave.py once \
+                --branch "$DEFAULT_BRANCH" \
+                --recovery-branch "agent-recovery/issue-${ISSUE_NUMBER}" \
+                >> .agent-work/logs/autosave.log 2>&1 || true
+          }
+          trap cleanup EXIT INT TERM
+          set +e
           opencode run \
               --model opencode/deepseek-v4.1-flash-free \
               --auto \
               "$prompt" 2>&1 | tee .agent-work/logs/opencode-output.log
+          status=${PIPESTATUS[0]}
+          set -e
+          cleanup
+          exit "$status"
 
       - name: Create recovery snapshot
         if: always()
         run: |
           set -euo pipefail
+          git rev-parse HEAD > "$RUNNER_TEMP/snapshot-head"
           tar \
               --exclude='./.git' \
               --exclude='./node_modules' \
@@ -220,7 +245,8 @@ jobs:
               --exclude='./.venv' \
               --exclude='./venv' \
               -czf "$RUNNER_TEMP/opencode-workspace.tar.gz" \
-              .
+              -C "$GITHUB_WORKSPACE" . \
+              -C "$RUNNER_TEMP" snapshot-head
 
       - name: Upload recovery snapshot
         if: always()
@@ -237,6 +263,11 @@ jobs:
     needs:
       - opencode
     if: always()
+    # One recovery job writes the default branch at a time, even when several
+    # issues were opened together.
+    concurrency:
+      group: opencode-recovery
+      cancel-in-progress: false
     defaults:
       run:
         shell: bash
@@ -257,20 +288,43 @@ jobs:
           name: opencode-recovery-${{ github.run_id }}
           path: ${{ runner.temp }}/opencode-recovery
 
-      - name: Restore workspace
+      - name: Restore snapshot changes
         run: |
           set -euo pipefail
           archive="$RUNNER_TEMP/opencode-recovery/opencode-workspace.tar.gz"
-          if [ -f "$archive" ]; then
-              echo "Recovery snapshot found."
-              tar -xzf "$archive" -C "$GITHUB_WORKSPACE"
-              echo "Workspace restored successfully."
+          if [ ! -f "$archive" ]; then
+              echo "No recovery snapshot artifact; the autosave commits are the source of truth."
+              exit 0
+          fi
+          extract="$RUNNER_TEMP/opencode-recovered"
+          rm -rf "$extract"
+          mkdir -p "$extract"
+          tar -xzf "$archive" -C "$extract"
+          base="$(cat "$extract/snapshot-head" 2>/dev/null || true)"
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              echo "Snapshot has no commit in this repository; not copying a stale tree over newer work."
+              exit 0
+          fi
+          # Build a snapshot commit from the extracted files and apply only its
+          # patch, so commits pushed by the autosave loop are not reverted.
+          index="$RUNNER_TEMP/opencode-snapshot.index"
+          rm -f "$index"
+          ( cd "$extract" && GIT_INDEX_FILE="$index" git --git-dir="$GITHUB_WORKSPACE/.git" add -A -- . )
+          tree="$(GIT_INDEX_FILE="$index" git --git-dir="$GITHUB_WORKSPACE/.git" write-tree)"
+          snapshot="$(git commit-tree "$tree" -p "$base" -m "recovered workspace")"
+          git diff --binary "$base" "$snapshot" > "$RUNNER_TEMP/recovered.patch"
+          if [ -s "$RUNNER_TEMP/recovered.patch" ]; then
+              if git apply --3way --index --binary "$RUNNER_TEMP/recovered.patch"; then
+                  echo "Applied the snapshot patch."
+              else
+                  echo "The snapshot conflicts with newer commits; keeping it on the recovery branch for manual recovery."
+                  git apply --abort 2>/dev/null || true
+              fi
           else
-              echo "No recovery snapshot available."
-              echo "Checking repository for already-pushed changes."
+              echo "The snapshot adds nothing over the commits already pushed."
           fi
 
-      - name: Commit and push recovered changes
+      - name: Commit, merge recovery branch and push
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -281,31 +335,32 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-              echo "No uncommitted changes to recover."
-              exit 0
+          branch="agent-recovery/issue-${ISSUE_NUMBER}"
+          if [ -z "$(git status --porcelain)" ] && [ -z "$(git diff --cached --name-only)" ] \
+                  && git fetch --quiet origin "$branch" 2>/dev/null; then
+              # No snapshot patch, but the autosave loop kept a branch because
+              # its push to the default branch lost a race.
+              if ! git merge --no-edit FETCH_HEAD; then
+                  git merge --abort || true
+                  echo "Recovery branch conflicts with the default branch."
+                  gh issue comment "$ISSUE_NUMBER" \
+                      --repo "$REPOSITORY" \
+                      --body "OpenCode recovery found commits on ${branch}, but merging them into ${DEFAULT_BRANCH} needs manual conflict resolution."
+                  exit 1
+              fi
           fi
-          git commit -m "chore: recover OpenCode workspace [skip ci]"
-          git fetch origin "$DEFAULT_BRANCH"
-          if ! git rebase "origin/$DEFAULT_BRANCH"; then
-              git rebase --abort || true
-              echo "Recovery rebase failed."
-              gh issue comment "$ISSUE_NUMBER" \
-                  --repo "$REPOSITORY" \
-                  --body "OpenCode recovery found changes, but automatic rebase failed. Manual conflict resolution is required."
-              exit 1
-          fi
-          if git push origin "HEAD:$DEFAULT_BRANCH"; then
-              echo "Recovery changes pushed successfully."
-              gh issue comment "$ISSUE_NUMBER" \
-                  --repo "$REPOSITORY" \
-                  --body "OpenCode recovery completed. Any remaining workspace changes have been committed and pushed to ${DEFAULT_BRANCH}."
-          else
-              echo "Recovery push failed."
-              gh issue comment "$ISSUE_NUMBER" \
-                  --repo "$REPOSITORY" \
-                  --body "OpenCode recovery could not push the recovered changes. Check the GitHub Actions recovery job logs."
-              exit 1
-          fi
+          result="$(python3 tools/opencode_autosave.py once \
+              --branch "$DEFAULT_BRANCH" \
+              --recovery-branch "$branch")"
+          echo "Recovery: ${result}"
+          case "$result" in
+              clean|pushed|up-to-date)
+                  gh issue comment "$ISSUE_NUMBER" \
+                      --repo "$REPOSITORY" \
+                      --body "OpenCode recovery completed. The workspace is committed and pushed to ${DEFAULT_BRANCH}." ;;
+              *)
+                  gh issue comment "$ISSUE_NUMBER" \
+                      --repo "$REPOSITORY" \
+                      --body "OpenCode recovery kept its commits on ${branch}, but could not push ${DEFAULT_BRANCH}. See the recovery job logs." ;;
+          esac
           

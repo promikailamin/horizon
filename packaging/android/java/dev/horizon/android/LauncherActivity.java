@@ -64,7 +64,20 @@ public final class LauncherActivity extends Activity {
     }
 
     private boolean ready() {
-        return new File(resources(), MANIFEST).isFile();
+        return new File(resources(), MANIFEST).isFile() || bundled();
+    }
+
+    /**
+     * A private test APK may carry prepared files in its assets. The native
+     * entry point unpacks them on the first launch, so there is nothing to
+     * import from the phone.
+     */
+    private boolean bundled() {
+        try (InputStream ignored = getAssets().open("horizon-resources.zip")) {
+            return true;
+        } catch (IOException missing) {
+            return false;
+        }
     }
 
     private boolean showSavedCrash() {

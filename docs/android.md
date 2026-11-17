@@ -7,9 +7,9 @@ the desktop build does.
 
 ## Install
 
-1. Download `horizon-android-arm64-v8a.apk` (or the file attached to the latest
-   `android-v*` release) and install it on an arm64 Android 9 (API 28) or newer
-   phone.
+1. Download `horizon-android-arm64-v8a.apk` from the rolling **Horizon Android
+   latest** prerelease (or from an `android-v*` release) and install it on an
+   arm64 Android 9 (API 28) or newer phone.
 2. On a computer, prepare the game files for Minecraft 26.3:
 
    ```sh
@@ -24,8 +24,10 @@ the desktop build does.
    choose the ZIP. The app unpacks it into its private storage; later starts go
    straight to the game. No computer or network is needed afterwards.
 
-The import screen appears only when the files are missing. The crash screen has
-the report on the clipboard and a **Restart** button.
+The import screen appears only when the files are missing. A private test APK
+built with `--resources` carries the prepared ZIP in its assets and starts the
+game immediately, with no import step. The crash screen has the report on the
+clipboard and a **Restart** button.
 
 ## What works and what does not
 
@@ -61,8 +63,12 @@ python3 tools/android_build.py --resources .local/horizon-client/26.3
 ```
 
 The APK is written to `.local/android/apk/horizon-android-arm64-v8a.apk`.
-`CARGO_TARGET_DIR` is honoured; the Gradle build uses
-`packaging/android/build/`.
+`CARGO_TARGET_DIR` is honoured (relative paths are resolved from the repository
+root); the Gradle build uses `packaging/android/build/`.
+
+Every push to `main` that changes Android files rebuilds the APK and refreshes
+the rolling `android-latest` prerelease. Pushing an `android-v*` tag creates a
+normal versioned release.
 
 ## Layout
 

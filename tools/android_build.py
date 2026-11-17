@@ -65,6 +65,15 @@ def build_tools(root: Path, version: str | None) -> Path:
     return folder
 
 
+def cargo_target_dir() -> Path:
+    """Where Cargo writes this build, honouring CARGO_TARGET_DIR."""
+    value = os.environ.get("CARGO_TARGET_DIR")
+    if not value:
+        return ROOT / "target"
+    directory = Path(value)
+    return directory if directory.is_absolute() else ROOT / directory
+
+
 def cargo_environment(ndk_root: Path, abi: str) -> dict[str, str]:
     target = TARGETS[abi]
     host = "windows-x86_64" if os.name == "nt" else "linux-x86_64"
@@ -164,7 +173,7 @@ def main() -> None:
              "--profile", args.profile], cwd=ROOT, env=environment)
 
     folder = "debug" if args.profile == "debug" else args.profile
-    library = ROOT / "target" / target / folder / "libhorizon_android.so"
+    library = cargo_target_dir() / target / folder / "libhorizon_android.so"
     if not library.is_file():
         raise SystemExit(f"Native library not found: {library}")
     jni = ANDROID / "jniLibs" / args.abi

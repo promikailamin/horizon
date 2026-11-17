@@ -100,11 +100,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.name }}
         run: |
           if gh release view "$TAG" > /dev/null 2>&1; then
             gh release upload "$TAG" .local/android/apk/*.apk --clobber
           else
             gh release create "$TAG" .local/android/apk/*.apk \
-              --title "Horizon Android ${{ steps.version.outputs.name }}" \
+              --title "Horizon Android ${VERSION}" \
               --notes-file packaging/android/RELEASE_NOTES.md
           fi
+
+      - name: Publish the latest main build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.name }}
+        run: |
+          # A rolling prerelease keeps an installable arm64 APK at a stable
+          # download URL without creating a tag for every main commit.
+          tag=android-latest
+          if ! gh release view "$tag" > /dev/null 2>&1; then
+            gh release create "$tag" \
+              --prerelease \
+              --title "Horizon Android latest" \
+              --notes-file packaging/android/RELEASE_NOTES.md
+          fi
+          gh release upload "$tag" .local/android/apk/*.apk --clobber
+          gh release edit "$tag" \
+            --notes "Latest main build: ${VERSION}. $(cat packaging/android/RELEASE_NOTES.md)"
