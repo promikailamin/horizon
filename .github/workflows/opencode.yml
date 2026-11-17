@@ -318,7 +318,8 @@ jobs:
                   echo "Applied the snapshot patch."
               else
                   echo "The snapshot conflicts with newer commits; keeping it on the recovery branch for manual recovery."
-                  git apply --abort 2>/dev/null || true
+                  git reset --hard HEAD
+                  git clean -fd
               fi
           else
               echo "The snapshot adds nothing over the commits already pushed."
