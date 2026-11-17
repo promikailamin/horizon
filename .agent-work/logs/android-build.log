@@ -297,3 +297,4 @@ $ cargo build -p horizon-android --target aarch64-linux-android --profile releas
    Compiling android_log-sys v0.3.2
    Compiling android_logger v0.15.1
    Compiling horizon-client-lib v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-lib)
+   Compiling horizon-android v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-android)
