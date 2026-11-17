@@ -1,40 +1,30 @@
-pr_ready: 26 files changed since origin/main; checks on local
-  rustfmt...
+pr_ready: 4 files changed since origin/main; checks on local
   Public tree...
   Public tree: pass (1 s)
   Layers...
-  Layers: pass (0 s)
+  Layers: pass (1 s)
   Addresses...
   Addresses: pass (4 s)
   Python tests...
-  rustfmt: pass (15 s)
-  clippy...
-  Python tests: pass (1 min 21 s)
-  clippy: pass (1 min 13 s)
-  tests: horizon-client, horizon-client-lib...
-  tests: horizon-client, horizon-client-lib: pass (2 min 3 s)
-  doc tests...
-  doc tests: pass (6 s)
-pr_ready: Rust 1.99.1 is older than CI's stable (1.100): clippy may flag lints CI doesn't, update with `rustup update`
-**pr_ready** (`tools/pr_ready.py` on runnervmccnms, against origin/main at b83dc12a7, 3 min 38 s)
+  Python tests: pass (1 min 27 s)
+**pr_ready** (`tools/pr_ready.py` on runnervmccnms, against origin/main at e6652423e, 1 min 33 s)
 
 | Check | Result |
 | --- | --- |
-| Scope | ⚠️ 26 files, +11996 −20 (not counted: 6 moved lines); 11973 lines of code: over 3000, split it if it can ship in parts; mixes CI, game |
+| Scope | ⚠️ 4 files, +709 −90; mixes CI, game |
 | Cargo.lock | ✅ unchanged |
 | Public tree | ✅ (1 s) |
-| Layers | ✅ |
+| Layers | ✅ (1 s) |
 | Addresses | ✅ (4 s) |
-| Python tests | ✅ 996 run, OK (skipped=9) (1 min 21 s) |
-| rustfmt | ✅ (15 s) |
-| Rust | ⚠️ 1.99.1 is older than CI's stable (1.100): clippy may flag lints CI doesn't, update with `rustup update` |
-| clippy | ✅ (1 min 13 s) |
-| tests: horizon-client, horizon-client-lib | ✅ 4510 passed (2 min 3 s) |
-| doc tests | ✅ 0 passed (6 s) |
+| Python tests | ✅ 1003 run, OK (skipped=9) (1 min 27 s) |
+| rustfmt | ➖ no Rust change |
+| clippy | ➖ no Rust change |
+| tests | ➖ no crate touched |
+| doc tests | ➖ no crate touched |
 | content root tests | ➖ content root untouched |
 | tokens.css up to date | ➖ theme untouched |
 | launcher rustfmt | ➖ launcher untouched |
 | launcher clippy | ➖ launcher untouched |
 | launcher tests | ➖ launcher untouched |
 | Parity | ➖ not run (no harness, oracle, probe or runner change; --harnesses runs them here): parity-main checks this on main |
-| Label | player-facing: `feature` if players get something new, no label for a fix (`release-now` if urgent) |
+| Label | `skip-release` |

@@ -239,6 +239,8 @@ jobs:
           git rev-parse HEAD > "$RUNNER_TEMP/snapshot-head"
           tar \
               --exclude='./.git' \
+              --exclude='./.local' \
+              --exclude='./target' \
               --exclude='./node_modules' \
               --exclude='./.gradle' \
               --exclude='./.cache' \
@@ -301,6 +303,7 @@ jobs:
           mkdir -p "$extract"
           tar -xzf "$archive" -C "$extract"
           base="$(cat "$extract/snapshot-head" 2>/dev/null || true)"
+          rm -f "$extract/snapshot-head"
           if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
               echo "Snapshot has no commit in this repository; not copying a stale tree over newer work."
               exit 0
