@@ -1,0 +1,110 @@
+name: android
+
+# Builds the arm64-v8a Horizon APK from this repository and, on an `android-v*`
+# tag or a manual run with `release`, publishes it as a GitHub Release.
+# The APK has no Minecraft code, textures or sounds: a player imports a folder
+# prepared from their own copy (docs/android.md). Do not add Mojang's files to
+# the workflow, the repository or a release.
+on:
+  push:
+    branches: [main, android]
+    tags: ['android-v*']
+    paths:
+      - 'crates/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'packaging/android/**'
+      - 'tools/android_build.py'
+      - '.github/workflows/android.yml'
+      - 'docs/android.md'
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Publish the APK as a GitHub Release
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      CARGO_TARGET_DIR: ${{ github.workspace }}/.local/ci-target
+      CARGO_BUILD_JOBS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android platform, build tools and NDK
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.3.13750724'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14'
+
+      - name: Version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            version="${GITHUB_REF_NAME#android-v}"
+          else
+            version="0.1.${GITHUB_RUN_NUMBER}"
+          fi
+          echo "name=${version}" >> "$GITHUB_OUTPUT"
+          echo "code=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
+          echo "tag=android-v${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Build the arm64 APK
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.name }}
+          VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: |
+          python3 tools/android_build.py \
+            --abi arm64-v8a \
+            --profile release \
+            --ndk-version 27.3.13750724 \
+            --build-tools-version 35.0.0 \
+            --gradle "$(command -v gradle)" \
+            --version-name "$VERSION_NAME" \
+            --version-code "$VERSION_CODE"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: horizon-android-arm64
+          path: .local/android/apk/*.apk
+          if-no-files-found: error
+
+      - name: Publish the release
+        if: github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.release)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" .local/android/apk/*.apk --clobber
+          else
+            gh release create "$TAG" .local/android/apk/*.apk \
+              --title "Horizon Android ${{ steps.version.outputs.name }}" \
+              --notes-file packaging/android/RELEASE_NOTES.md
+          fi

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Horizon</string>
+    <string name="crash_title">Horizon crashed</string>
+    <string name="crash_copy">Copy report</string>
+    <string name="crash_close">Close</string>
+    <string name="crash_restart">Restart</string>
+    <string name="crash_copied">Crash report copied to the clipboard.</string>
+
+    <string name="launcher_title">Horizon for Android</string>
+    <string name="launcher_body">Horizon is an unofficial Minecraft: Java Edition 26.3 client written in Rust. It contains none of Minecraft\'s code, textures or sounds, so it prepares those from your own copy of the game.\n\nOn a computer, prepare the resources with horizon-prepare (see docs/android.md in the repository), then copy the resulting horizon-resources folder into a ZIP file and import it here. The app keeps its own copy; no computer is needed after this step.</string>
+    <string name="launcher_import">Import prepared resources (.zip)</string>
+    <string name="launcher_quit">Quit</string>
+    <string name="launcher_waiting">Preparing resources…</string>
+    <string name="launcher_done">Resources installed. Starting Horizon…</string>
+    <string name="launcher_bad_zip">This ZIP does not contain a prepared Horizon resource folder (horizon-resources.json was not found).</string>
+    <string name="launcher_failed">Could not import the resources: %1$s</string>
+    <string name="launcher_import_failed_title">Import failed</string>
+    <string name="launcher_no_picker">No file manager can open a ZIP on this device.</string>
+    <string name="launcher_native_missing">This APK does not contain the Horizon game library for this phone\'s architecture. Install the arm64-v8a APK.</string>
+
+    <string name="debug_body">The crash report is on the clipboard. It is also stored in the app\'s private files for the next launch.</string>
+</resources>

@@ -1,0 +1,71 @@
+plugins { id 'com.android.application' version '8.11.1' }
+
+android {
+    namespace 'dev.horizon.android'
+    compileSdk providers.gradleProperty('compileSdk').getOrElse('35').toInteger()
+
+    defaultConfig {
+        applicationId providers.gradleProperty('appId').getOrElse('dev.horizon.android')
+        minSdk providers.gradleProperty('minSdk').getOrElse('28').toInteger()
+        targetSdk providers.gradleProperty('targetSdk').getOrElse('35').toInteger()
+        versionCode providers.gradleProperty('versionCode').getOrElse('1').toInteger()
+        versionName providers.gradleProperty('versionName').getOrElse('0.1.0')
+        ndk { abiFilters providers.gradleProperty('abi').getOrElse('arm64-v8a') }
+    }
+
+    signingConfigs {
+        release {
+            def store = providers.gradleProperty('keystore').getOrNull()
+            if (store != null) {
+                storeFile file(store)
+                storePassword providers.gradleProperty('keystorePassword').getOrElse('android')
+                keyAlias providers.gradleProperty('keyAlias').getOrElse('horizon')
+                keyPassword providers.gradleProperty('keyPassword').getOrElse('android')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+            shrinkResources false
+            // A release build without a supplied key is signed with the local,
+            // throwaway debug key so it can still be installed on a test phone.
+            signingConfig providers.gradleProperty('keystore').isPresent()
+                    ? signingConfigs.release
+                    : signingConfigs.debug
+        }
+    }
+
+    sourceSets.main {
+        java.srcDirs = ['java']
+        manifest.srcFile 'AndroidManifest.xml'
+        jniLibs.srcDirs = ['jniLibs']
+        assets.srcDirs = ['assets']
+        res.srcDirs = ['res']
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            keepDebugSymbols += '**/*.so'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+    }
+}
+
+layout.buildDirectory = file('build')

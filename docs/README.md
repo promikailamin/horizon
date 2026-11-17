@@ -60,6 +60,7 @@ To play, use [the launcher](../launcher/README.md); the project site is [playhor
 - [Microsoft account sign-in](microsoft-account.md): signing players in with their Microsoft account in the launcher, joining online-mode servers, the owner gate, and the OAuth device-code flow.
 - [Windows allocators](windows-allocators.md): mimalloc defaults, the optional `windows-segment-heap` Cargo feature for Win32 heap APIs, and how to validate the executable manifest.
 - [Windows ARM64](windows-arm64.md): building and running native Windows ARM64 executables for `aarch64-pc-windows-msvc`, cross-compilation, and release packaging.
+- [Android](android.md): the arm64-v8a APK, importing prepared game files on the phone, the crash screen, and the GitHub Actions release.
 
 ## Parity
 

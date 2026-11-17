@@ -4,10 +4,28 @@
 #![forbid(unsafe_code)]
 extern crate self as horizon_client;
 pub use horizon_client_lib::*;
+#[cfg(target_os = "android")]
+pub mod android_platform;
 pub mod entry;
 pub mod game;
 mod horizon_look;
+pub mod launch_args;
 pub mod mod_api;
+
+/// Build the platform's event loop. Android needs the `AndroidApp` its
+/// `android_main` entry point received; every other platform reads the
+/// environment.
+pub fn new_event_loop()
+-> std::result::Result<winit::event_loop::EventLoop<()>, winit::error::EventLoopError> {
+    #[cfg(target_os = "android")]
+    {
+        android_platform::event_loop()
+    }
+    #[cfg(not(target_os = "android"))]
+    {
+        winit::event_loop::EventLoop::new()
+    }
+}
 
 #[cfg(test)]
 mod brewing_speed_load_tests;

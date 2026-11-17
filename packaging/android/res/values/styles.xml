@@ -1,0 +1,14 @@
+<resources>
+    <style name="HorizonTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">#9a86ff</item>
+        <item name="android:navigationBarColor">#111014</item>
+        <item name="android:statusBarColor">#111014</item>
+    </style>
+    <style name="HorizonGameTheme" parent="android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">#9a86ff</item>
+    </style>
+</resources>
