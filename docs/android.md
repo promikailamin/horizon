@@ -31,9 +31,14 @@ the report on the clipboard and a **Restart** button.
 
 - The arm64 native game, single player, LAN and multiplayer use the same code as
   the desktop client.
-- The game expects a touch screen to be driven by Horizon's on-screen controls.
-  That wiring is not complete in this build: use a Bluetooth/USB keyboard and
-  mouse, or a controller the Android input runtime recognises.
+- The on-screen touch controls are wired: a joystick or D-pad moves, dragging
+  turns the view, and buttons cover jump, sneak, sprint, attack, use, chat,
+  pause, inventory, settings, F3 and F5. On menus the first finger acts as the
+  mouse pointer and left button.
+- A Bluetooth/USB keyboard and mouse and a controller still work.
+- This APK assembles and passes `apksigner`, and the host tests pass. It has not
+  been run on a physical Android device in this environment; treat it as a test
+  build and report what breaks.
 - The importer deliberately does not download or bundle Mojang's files. A
   private test build may pass `--resources <prepared folder>` to
   `tools/android_build.py`, which packs it into the APK's assets; do not publish
@@ -41,13 +46,17 @@ the report on the clipboard and a **Restart** button.
 
 ## Build locally
 
-Needs an Android SDK with NDK 27.3 or newer, build-tools 35, Gradle 8.14, a JDK
-and the `aarch64-linux-android` Rust target.
+Needs an Android SDK with NDK 27.3 or newer, build-tools 35, Gradle 8.14, JDK
+21 (Gradle 8.14 does not read Java 25's class files) and the
+`aarch64-linux-android` Rust target. Pass `--java-home` to select the JDK when
+`java` on `PATH` is newer.
 
 ```sh
 rustup target add aarch64-linux-android
 python3 tools/android_build.py --check                  # type-check only
 python3 tools/android_build.py --abi arm64-v8a           # release APK
+python3 tools/android_build.py --abi arm64-v8a \
+    --java-home /usr/lib/jvm/temurin-21-jdk-amd64
 python3 tools/android_build.py --resources .local/horizon-client/26.3
 ```
 
@@ -62,6 +71,7 @@ The APK is written to `.local/android/apk/horizon-android-arm64-v8a.apk`.
 | `crates/horizon-client/src/android_main.rs` | `android_main`, the native entry point; unpacking a bundled resource ZIP; panic report file |
 | `crates/horizon-client/src/android_platform.rs` | keeps the `AndroidApp` winit's event loop needs |
 | `crates/horizon-client/src/launch_args.rs` | lets the Android host supply the command line the shared startup reads |
+| `crates/horizon-client/src/game/touch_input.rs` | touch drives the on-screen pad in play and the mouse pointer on menus |
 | `packaging/android/java/.../HorizonApplication.java` | uncaught-exception handler: report to clipboard and `DebugActivity` |
 | `packaging/android/java/.../DebugActivity.java` | shows and copies the crash report, restarts the app |
 | `packaging/android/java/.../LauncherActivity.java` | first-run resource import through Android's document picker |

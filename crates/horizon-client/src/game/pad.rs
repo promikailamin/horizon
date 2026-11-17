@@ -376,6 +376,8 @@ impl Game<'_> {
 
     /// Once per loop iteration: read the pads and act on button changes.
     pub(super) fn poll_pads(&mut self, event_loop: &dyn EventLoopCtl) {
+        self.handle_touch_requests();
+        let touch = self.touch_pad_state();
         self.pad.virtual_input = self.pad.injected != PadState::default();
         let context = self.pad_context();
         if let Some(old) = self.pad.context.filter(|old| *old != context) {
@@ -385,7 +387,7 @@ impl Game<'_> {
             self.pad_cancel_inputs(event_loop);
         }
         self.pad.context = Some(context);
-        if !self.settings.controller.enabled {
+        if !self.settings.controller.enabled && !touch.active(&self.settings.controller) {
             self.pad_output_off();
             self.pad_cancel_inputs(event_loop);
             // The radial menu closed with the pad: its overlay fades out, as for a cancel.
@@ -407,6 +409,9 @@ impl Game<'_> {
             Some(state) => state,
             None => self.pad.read(),
         };
+        // The touch controls are a pad as well: their buttons and sticks merge
+        // with a real controller (a phone may have one connected too).
+        let hardware = hardware.merge(&touch);
         // A Nintendo pad going by its letters is read that way: its own, or the one
         // splitscreen's router feeds this player.
         let hardware = if self.pad.by_letter(&self.settings.controller) {
@@ -647,7 +652,7 @@ impl Game<'_> {
 
     /// A bound action: a vanilla mapping acts as its default key or mouse
     /// button, like a rebound keyboard key.
-    fn pad_action(&mut self, action: &str, down: bool) -> Result<()> {
+    pub(super) fn pad_action(&mut self, action: &str, down: bool) -> Result<()> {
         let Some(route) = gamepad::route(action) else {
             log::warn!("Horizon: controller action {action} has no handler");
             return Ok(());

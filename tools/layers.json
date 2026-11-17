@@ -12,6 +12,7 @@
     "crates/horizon-mod-registry/Cargo.toml"
   ],
   "crates": {
+    "horizon-android": "engine",
     "horizon-assets": "engine",
     "horizon-bench": "engine",
     "horizon-client": "engine",

@@ -471,6 +471,7 @@ mod tick_script;
 mod titles;
 mod tnt;
 mod totem;
+mod touch_input;
 mod trading;
 mod transient_blocks;
 mod trial_spawner;
@@ -547,6 +548,7 @@ use horizon_client::{
     streaming::{Streaming, WorkerContext},
     testgen::TestTerrain,
     title::{Action, Title},
+    touch::TouchControls,
     vanillagen::VanillaTerrain,
     world::World,
 };
@@ -2294,6 +2296,10 @@ struct Game<'a> {
     video_modes: horizon_client::window::VideoModeList,
     /// MouseHandler's accumulated look and wheel state.
     mouse: MouseLook,
+    /// Android on-screen controls; nothing is shown or read while the game is not in play.
+    touch: TouchControls,
+    /// The finger a screen is following as its pointer (menus, not the touch controls).
+    screen_touch: Option<(u64, winit::event::DeviceId)>,
     /// An agent moved the mouse (`mouse-move`) since the pointer was last
     /// grabbed or released: its motion turns the view like a grabbed pointer.
     agent_pointer: bool,
@@ -6264,6 +6270,13 @@ impl Game<'_> {
         self.draw_studio_bars(&mut batch);
         if show_hud {
             self.draw_pad_guide(&mut batch, guide_from);
+            if cfg!(target_os = "android")
+                && self.screen == Screen::Playing
+                && self.player.is_some()
+            {
+                self.touch.viewport(batch.width as u32, batch.height as u32);
+                self.touch.draw(&mut batch, &self.gui.atlas);
+            }
         }
         batch
     }
@@ -9812,6 +9825,11 @@ impl Game<'_> {
         if let WindowEvent::Focused(false) = &event {
             self.update_modifiers(winit::keyboard::ModifiersState::empty());
         }
+        if let WindowEvent::Touch(touch) = &event {
+            let touch = *touch;
+            self.handle_touch(event_loop, &touch);
+            return;
+        }
         if let WindowEvent::DroppedFile(path) = &event {
             self.drop_pack_file(path);
         }
@@ -11456,6 +11474,8 @@ impl<'a> Game<'a> {
             fullscreen: horizon_client::window::FullscreenState::new(false),
             video_modes: Default::default(),
             mouse: MouseLook::default(),
+            touch: TouchControls::default(),
+            screen_touch: None,
             agent_pointer: false,
             smooth_camera: false,
             toggles: Default::default(),

@@ -31,7 +31,8 @@ public final class DebugActivity extends Activity {
         if (report == null) {
             report = readSaved();
         }
-        HorizonApplication.copy(this, report);
+        final String shown = report;
+        HorizonApplication.copy(this, shown);
 
         int pad = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
@@ -41,7 +42,7 @@ public final class DebugActivity extends Activity {
         root.setBackgroundColor(Color.rgb(17, 16, 20));
 
         TextView body = new TextView(this);
-        body.setText(report);
+        body.setText(shown);
         body.setTextColor(Color.rgb(235, 232, 245));
         body.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         body.setTypeface(Typeface.MONOSPACE);
@@ -55,7 +56,7 @@ public final class DebugActivity extends Activity {
         Button copy = new Button(this);
         copy.setText(R.string.crash_copy);
         copy.setOnClickListener(view -> {
-            HorizonApplication.copy(this, report);
+            HorizonApplication.copy(this, shown);
             Toast.makeText(this, R.string.crash_copied, Toast.LENGTH_SHORT).show();
         });
         root.addView(copy);

@@ -40,6 +40,8 @@ MOD_API_GEN = [
 ]
 READERS = {
     "cargo-horizon-mod": ["crates/horizon-mods/tests/index"],
+    # Builds horizon-client's entry point, so it owns that folder and reads what it reads.
+    "horizon-android": HORIZON_CLIENT,
     "horizon-client": HORIZON_CLIENT,
     # Shares horizon-client's sources, so its unit tests run the same reads.
     "horizon-client-lib": HORIZON_CLIENT,
@@ -70,7 +72,12 @@ READERS = {
 # horizon-client-core's lang.rs tests read the sources of every crate for the language keys the code names.
 SCANNED = {"horizon-client-core": ["crates"]}
 # Literals the scan takes for a walk up to crates/ that are not one (a ".." among path-traversal checks).
-NOT_READS = {"horizon-client": {"crates"}, "horizon-client-lib": {"crates"}, "horizon-prepare": {"crates"}}
+NOT_READS = {
+    "horizon-android": {".", "crates"},
+    "horizon-client": {"crates"},
+    "horizon-client-lib": {"crates"},
+    "horizon-prepare": {"crates"},
+}
 
 
 def under(path, folder):

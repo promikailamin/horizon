@@ -1,0 +1,100 @@
+$ cargo build -p horizon-android --target aarch64-linux-android --profile release
+   Compiling jni-sys v0.3.1
+   Compiling horizon-client v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client)
+   Compiling ndk-sys v0.6.0+11769913
+   Compiling wgpu-hal v30.0.1 (/home/runner/work/horizon/horizon/third_party/wgpu-hal)
+   Compiling ndk v0.9.0
+   Compiling android-activity v0.6.1
+   Compiling winit v0.30.13
+   Compiling horizon-client-input v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-input)
+   Compiling wgpu-core-deps-windows-linux-android v30.0.1
+   Compiling wgpu-core v30.0.1
+   Compiling wgpu v30.0.1
+   Compiling horizon-hdr v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-hdr)
+   Compiling horizon-client-render v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-render)
+   Compiling horizon-client-lib v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-lib)
+   Compiling horizon-android v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-android)
+    Finished `release` profile [optimized] target(s) in 9m 39s
+$ /tmp/gradle-8.14/bin/gradle --no-daemon -p /home/runner/work/horizon/horizon/packaging/android -Pabi=arm64-v8a -PminSdk=28 -PversionName=0.1.0 -PversionCode=1 -Pkeystore=/home/runner/work/horizon/horizon/.local/android/debug.keystore assembleRelease
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :preBuild UP-TO-DATE
+> Task :preReleaseBuild UP-TO-DATE
+> Task :mergeReleaseJniLibFolders
+> Task :checkReleaseDuplicateClasses UP-TO-DATE
+> Task :generateReleaseBuildConfig UP-TO-DATE
+> Task :javaPreCompileRelease UP-TO-DATE
+> Task :checkReleaseAarMetadata UP-TO-DATE
+> Task :generateReleaseResValues UP-TO-DATE
+> Task :mapReleaseSourceSetPaths UP-TO-DATE
+> Task :generateReleaseResources UP-TO-DATE
+> Task :mergeReleaseResources UP-TO-DATE
+> Task :packageReleaseResources UP-TO-DATE
+> Task :parseReleaseLocalResources UP-TO-DATE
+> Task :createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :extractDeepLinksRelease UP-TO-DATE
+> Task :processReleaseMainManifest UP-TO-DATE
+> Task :processReleaseManifest UP-TO-DATE
+> Task :processReleaseManifestForPackage UP-TO-DATE
+> Task :processReleaseResources UP-TO-DATE
+> Task :mergeReleaseNativeLibs
+> Task :compileReleaseJavaWithJavac UP-TO-DATE
+> Task :dexBuilderRelease UP-TO-DATE
+> Task :desugarReleaseFileDependencies UP-TO-DATE
+> Task :stripReleaseDebugSymbols
+> Task :mergeReleaseStartupProfile UP-TO-DATE
+> Task :mergeExtDexRelease UP-TO-DATE
+> Task :mergeDexRelease UP-TO-DATE
+> Task :extractReleaseNativeSymbolTables
+> Task :mergeReleaseArtProfile UP-TO-DATE
+> Task :mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :mergeReleaseGlobalSynthetics UP-TO-DATE
+> Task :compileReleaseArtProfile UP-TO-DATE
+> Task :mergeReleaseShaders UP-TO-DATE
+> Task :compileReleaseShaders NO-SOURCE
+> Task :generateReleaseAssets UP-TO-DATE
+> Task :mergeReleaseAssets UP-TO-DATE
+> Task :compressReleaseAssets UP-TO-DATE
+> Task :extractReleaseVersionControlInfo UP-TO-DATE
+> Task :extractProguardFiles UP-TO-DATE
+> Task :generateReleaseLintVitalReportModel UP-TO-DATE
+> Task :lintVitalAnalyzeRelease UP-TO-DATE
+> Task :lintVitalReportRelease UP-TO-DATE
+> Task :lintVitalRelease
+> Task :processReleaseJavaRes NO-SOURCE
+> Task :mergeReleaseJavaResource UP-TO-DATE
+> Task :optimizeReleaseResources UP-TO-DATE
+> Task :collectReleaseDependencies UP-TO-DATE
+> Task :sdkReleaseDependencyData UP-TO-DATE
+> Task :validateSigningRelease UP-TO-DATE
+> Task :writeReleaseAppMetadata UP-TO-DATE
+> Task :writeReleaseSigningConfigVersions UP-TO-DATE
+> Task :packageRelease
+> Task :createReleaseApkListingFileRedirect UP-TO-DATE
+> Task :assembleRelease
+
+[Incubating] Problems report is available at: file:///home/runner/work/horizon/horizon/packaging/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 14s
+47 actionable tasks: 6 executed, 41 up-to-date
+$ /usr/local/lib/android/sdk/build-tools/35.0.0/apksigner verify --verbose /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/usr/local/lib/android/sdk/build-tools/35.0.0/lib/apksigner.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+APK: /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk

@@ -1,0 +1,264 @@
+..................................
+running 1 test
+test cancelled_default_and_missing_target ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.......................................................................................................................................................................................................
+running 1 test
+test all_environments_valid_invalid_and_unchanged ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.
+running 2 tests
+test studio_freecam_uses_its_fov ... ok
+test unchanged_narrow_wide_and_invalid ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+....................
+running 2 tests
+test spawn_merge_is_vanilla_unless_a_mod_decides ... ok
+test tick_merge_is_vanilla_unless_a_mod_decides ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+...........................................................................warning: variants `Agent` and `Game` are never constructed
+ --> /tmp/tmpnjg3sepm/key.rs:8:34
+  |
+8 |     pub enum InputOrigin { User, Agent, Game }
+  |              -----------         ^^^^^  ^^^^
+  |              |
+  |              variants in this enum
+  |
+  = note: `InputOrigin` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+
+
+running 1 test
+test all_actions_consumption_and_window_gates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.s.......
+running 1 test
+test bridge ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+...................................................
+running 1 test
+test bridge_preserves_v1_and_names_player_mob_and_stand_attackers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+........................
+running 2 tests
+test the_render_list_holds_mod_entities_of_templates_without_one ... ok
+test a_mod_block_entity_on_a_template_without_one_is_removed_and_not_pushed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.
+running 1 test
+test heard_once_per_change_in_each_level ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.............
+running 1 test
+test dispatch_order_and_bookkeeping ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.
+running 12 tests
+test mouse::tests::control_click_is_a_right_click_until_released ... ok
+test horizontal_fractional_steps_and_context ... ok
+test mouse::tests::cinematic_camera_spreads_the_same_motion_over_frames ... ok
+test cancellation_consumes_steps_and_preserves_gameplay ... ok
+test mouse::tests::default_sensitivity_turns_point_fifteen_degrees_per_count_at_one ... ok
+test mouse::tests::ease_in_out_starts_and_ends_slowly ... ok
+test mouse::tests::inverted_and_scoping_turns ... ok
+test mouse::tests::scroll_accumulates_fractions ... ok
+test mouse::tests::turn_player_matches_the_vanilla_formula ... ok
+test mouse::tests::motion_for_turn_round_trips_through_turn_player ... ok
+test mouse::tests::the_mouse_position_is_the_centre_when_the_grab_changes ... ok
+test source_and_legacy_gates ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.
+running 1 test
+test stack_and_unknown_item ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.....ss....................github/trusted-reviewers.txt: ignored (not `<id> <login>` or `paused`): line 5: 'not a login!'
+...github/trusted-reviewers.txt: ignored (not `<id> <login>` or `paused`): line 1: 'kacpherek'; line 2: '101'; line 3: '101 kacpherek extra'; line 4: '0 zero'
+..github/trusted-reviewers.txt: ignored (not `<id> <login>` or `paused`): line 5: 'not a login!'
+.....github/trusted-reviewers.txt: ignored (not `<id> <login>` or `paused`): line 5: 'not a login!'
+.........................................s............................................FAIL dedicated_server 1s  (/tmp/tmpoxha__qw/logs/dedicated_server.log)
+RETRIED dedicated_server: failed, and it is a known flaky harness (timer): running it once more (first run's log: /tmp/tmpoxha__qw/logs/dedicated_server.log)
+PASS dedicated_server 1s
+.FAIL dedicated_server 1s  (/tmp/tmp0o4e9bq5/logs/dedicated_server.log)
+RETRIED dedicated_server: failed, and it is a known flaky harness (timer): running it once more (first run's log: /tmp/tmp0o4e9bq5/logs/dedicated_server.log)
+FAIL dedicated_server 1s  (/tmp/tmp0o4e9bq5/logs/dedicated_server.log)
+.retry food without reused oracle results
+PASS food 1s
+.PASS dedicated_server 1s
+FAIL dedicated_server~2 1s  (/tmp/tmp0uee3duj/logs/dedicated_server~2.log)
+FLAKY dedicated_server: pass, fail in 2 runs
+..........................................s......................s...................created https://github.com/o/r/issues/101 [26.4] Protocol: packets play/clientbound +1 -0 ~3
+created https://github.com/o/r/issues/102 [26.4] Harness light: fails on 26.4
+created https://github.com/o/r/issues/103 [26.4] crates/w/src/food.rs: 1 vanilla classes changed (1 methods, 1 named)
+created https://github.com/o/r/issues/104 [26.4] Port to Minecraft 26.4
+..................................................s.................................  launcher tests...
+   Compiling launcher-check-fixture v0.1.0 (/tmp/tmp9e91zid2/launcher)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs (/tmp/tmp9e91zid2/target/debug/deps/launcher_check_fixture-1e039559c9338645)
+
+running 1 test
+test library_passes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/tmp/tmp9e91zid2/target/debug/deps/launcher_check_fixture-794d001ce3e60ba1)
+
+running 1 test
+test binary_fails ... FAILED
+
+failures:
+
+---- binary_fails stdout ----
+
+thread 'binary_fails' (64164) panicked at src/main.rs:3:21:
+launcher binary test ran
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    binary_fails
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin launcher-check-fixture`
+  launcher tests: fail (0 s)
+..............s..s..............................................
+running 1 test
+test changed_unchanged_and_invalid ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.
+running 1 test
+test cancellation_is_per_hand_and_carries_displayed_state ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.........................................................../home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/vanilla/level.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/horizon/level.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/vanilla/data/minecraft/custom.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/horizon/data/minecraft/custom.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/vanilla/data/minecraft/game_rules.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/horizon/data/minecraft/game_rules.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/vanilla/players/data/player.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/runner/work/horizon/horizon/tools/anvil_dump.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tmpfbb27mo9/horizon/players/data/player.dat'>
+  raw = open(path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...
+running 1 test
+test release_and_screen_gates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.error[E0609]: no field `screen_touch` on type `&mut Game`
+  --> /tmp/tmpq1e9w6iy/drag.rs:78:18
+   |
+78 |             self.screen_touch = None;
+   |                  ^^^^^^^^^^^^ unknown field
+   |
+   = note: available fields are: `drag_button`, `physical_buttons`, `physical_keys`, `cursor`, `modifiers` ... and 8 others
+
+error[E0609]: no field `touch` on type `&mut Game`
+  --> /tmp/tmpq1e9w6iy/drag.rs:79:18
+   |
+79 |             self.touch.clear();
+   |                  ^^^^^ unknown field
+   |
+   = note: available fields are: `drag_button`, `physical_buttons`, `physical_keys`, `cursor`, `modifiers` ... and 8 others
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0609`.
+Ewarning: method `pad_in_menu` is never used
+  --> /tmp/tmplu7r51j5/focus.rs:13:8
+   |
+12 | impl Game {
+   | --------- method in this implementation
+13 |     fn pad_in_menu(&self) -> bool { self.in_menu }
+   |        ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+
+
+running 1 test
+test accepted_and_ignored_presses ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+..
+running 1 test
+test order_and_cancellation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+.................................................................................................................................................
+======================================================================
+ERROR: test_drag_lifecycle_delta_and_cancelled_cursor (test_screen_mouse_dragged_hook.ScreenMouseDraggedHookTests.test_drag_lifecycle_delta_and_cancelled_cursor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/horizon/horizon/tests/test_screen_mouse_dragged_hook.py", line 133, in test_drag_lifecycle_delta_and_cancelled_cursor
+    subprocess.run(["rustc", "--edition=2024", "--test", str(src), "-o", str(exe)], check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['rustc', '--edition=2024', '--test', '/tmp/tmpq1e9w6iy/drag.rs', '-o', '/tmp/tmpq1e9w6iy/drag.exe']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 996 tests in 72.310s
+
+FAILED (errors=1, skipped=9)
+Stamped 1 fragment(s), through API 8
+Stamped 1 fragment(s), through API 8
+Stamped 1 fragment(s), through API 8
+2 pending native hook fragment(s)
+Stamped 2 fragment(s), through API 9
+Stamped 2 fragment(s), through API 9
+1 pending native hook fragment(s)
+Stamped 1 fragment(s), through API 10
+1 pending native hook fragment(s)
+Stamped 1 fragment(s), through API 8
+Stamped 1 fragment(s), through API 8
+Stamped 1 fragment(s), through API 8
+Stamped 1 fragment(s), through API 646

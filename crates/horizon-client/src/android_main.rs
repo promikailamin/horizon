@@ -120,7 +120,6 @@ fn run(app: AndroidApp) {
         log::error!("Android supplied no application data directory");
         return;
     };
-    let home = PathBuf::from(home);
     install_panic_hook(home.clone());
     let game_dir = home.join("game");
     let resources = home.join("horizon-resources");

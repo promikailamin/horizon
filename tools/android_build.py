@@ -193,9 +193,11 @@ def main() -> None:
          "-Pkeystore=" + str(args.keystore.resolve()),
          "assemble" + variant], cwd=ROOT, env=environment)
 
-    built = ANDROID / "build" / "outputs" / "apk" / variant.lower() / f"HorizonAndroid-{variant}.apk"
-    if not built.is_file():
-        raise SystemExit(f"APK not found: {built}")
+    out_dir = ANDROID / "build" / "outputs" / "apk" / variant.lower()
+    apks = sorted(out_dir.glob("*.apk"), key=lambda p: p.stat().st_mtime)
+    if not apks:
+        raise SystemExit(f"APK not found under {out_dir}")
+    built = apks[-1]
     args.out.mkdir(parents=True, exist_ok=True)
     apk = args.out / f"horizon-android-{args.abi}.apk"
     shutil.copyfile(built, apk)

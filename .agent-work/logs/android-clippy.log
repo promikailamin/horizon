@@ -1,0 +1,5 @@
+$ cargo clippy -p horizon-android --target aarch64-linux-android --no-deps -- -D warnings
+   Compiling horizon-client v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client)
+    Checking horizon-client-lib v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-lib)
+    Checking horizon-android v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-android)
+    Finished `dev` profile [unoptimized] target(s) in 34.07s

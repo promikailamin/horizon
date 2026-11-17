@@ -27,9 +27,12 @@ def prohibited(path):
     # Original JDK-only tools are an exact allowlist; recovered game Java stays private.
     if path in ORIGINAL_JDK_TOOLS:
         return False
-    # Original Horizon mod sources may also be tracked.
+    # Original Horizon mod and Android app sources may also be tracked. Recovered
+    # game Java stays private: only the app's own package is allowed.
     if parsed.suffix == ".java" and path.startswith(("mods/horizon/src/", "mods/horizon-lab/src/")):
         return not ("/dev/horizonlab/" in path)
+    if parsed.suffix == ".java" and path.startswith("packaging/android/java/dev/horizon/android/"):
+        return False
     return (
         bool(parsed.parts and parsed.parts[0] in PRIVATE_ROOTS)
         or parsed.suffix.lower() in PRIVATE_EXTENSIONS
