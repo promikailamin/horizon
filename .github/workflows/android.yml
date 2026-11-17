@@ -92,7 +92,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: horizon-android-arm64
-          path: .local/android/apk/*.apk
+          path: |
+            .local/android/apk/*.apk
+            .local/android/apk/*.zip
           if-no-files-found: error
 
       - name: Publish the release
@@ -103,9 +105,9 @@ jobs:
           VERSION: ${{ steps.version.outputs.name }}
         run: |
           if gh release view "$TAG" > /dev/null 2>&1; then
-            gh release upload "$TAG" .local/android/apk/*.apk --clobber
+            gh release upload "$TAG" .local/android/apk/*.apk .local/android/apk/*.zip --clobber
           else
-            gh release create "$TAG" .local/android/apk/*.apk \
+            gh release create "$TAG" .local/android/apk/*.apk .local/android/apk/*.zip \
               --title "Horizon Android ${VERSION}" \
               --notes-file packaging/android/RELEASE_NOTES.md
           fi
@@ -125,6 +127,6 @@ jobs:
               --title "Horizon Android latest" \
               --notes-file packaging/android/RELEASE_NOTES.md
           fi
-          gh release upload "$tag" .local/android/apk/*.apk --clobber
+          gh release upload "$tag" .local/android/apk/*.apk .local/android/apk/*.zip --clobber
           gh release edit "$tag" \
             --notes "Latest main build: ${VERSION}. $(cat packaging/android/RELEASE_NOTES.md)"

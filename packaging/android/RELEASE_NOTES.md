@@ -1,8 +1,14 @@
 # Horizon for Android (arm64-v8a)
 
-This APK contains the Horizon engine and its small Android launcher. It contains
-no Minecraft code, textures or sounds: Horizon prepares those from the player's
-own copy of Minecraft: Java Edition 26.3, like the desktop build.
+This release carries the arm64 build twice: the installable
+`horizon-android-arm64-v8a.apk`, and the prepared build archive
+`horizon-android-arm64-v8a.zip` (the same APK plus a short README).
+
+Both contain the Horizon engine and its small Android launcher. They contain no
+Minecraft code, textures or sounds: Horizon prepares those from the player's own
+copy of Minecraft: Java Edition 26.3, like the desktop build. A prepared build
+ZIP with Mojang's files is deliberately not published; build one for yourself
+with `tools/android_build.py --resources <prepared folder>`.
 
 ## Install and play
 

@@ -7,9 +7,11 @@ the desktop build does.
 
 ## Install
 
-1. Download `horizon-android-arm64-v8a.apk` from the rolling **Horizon Android
-   latest** prerelease (or from an `android-v*` release) and install it on an
-   arm64 Android 9 (API 28) or newer phone.
+1. Download `horizon-android-arm64-v8a.apk` (or the same build in
+   `horizon-android-arm64-v8a.zip`) from the rolling **Horizon Android latest**
+   prerelease (or from an `android-v*` release) and install it on an arm64
+   Android 9 (API 28) or newer phone. The ZIP is the release's *prepared build*
+   archive: the APK plus a short README. It deliberately carries no game data.
 2. On a computer, prepare the game files for Minecraft 26.3:
 
    ```sh
@@ -56,19 +58,39 @@ Needs an Android SDK with NDK 27.3 or newer, build-tools 35, Gradle 8.14, JDK
 ```sh
 rustup target add aarch64-linux-android
 python3 tools/android_build.py --check                  # type-check only
-python3 tools/android_build.py --abi arm64-v8a           # release APK
+python3 tools/android_build.py --abi arm64-v8a           # release APK and build ZIP
 python3 tools/android_build.py --abi arm64-v8a \
     --java-home /usr/lib/jvm/temurin-21-jdk-amd64
 python3 tools/android_build.py --resources .local/horizon-client/26.3
 ```
 
-The APK is written to `.local/android/apk/horizon-android-arm64-v8a.apk`.
+The public outputs are written to `.local/android/apk/`:
+
+- `horizon-android-arm64-v8a.apk` — the installable arm64 APK.
+- `horizon-android-arm64-v8a.zip` — the prepared build archive (the APK and a
+  README) that releases attach.
+
 `CARGO_TARGET_DIR` is honoured (relative paths are resolved from the repository
 root); the Gradle build uses `packaging/android/build/`.
 
-Every push to `main` that changes Android files rebuilds the APK and refreshes
-the rolling `android-latest` prerelease. Pushing an `android-v*` tag creates a
-normal versioned release.
+### Preparing a build ZIP for yourself
+
+The release build ZIP never contains Mojang's files; the repository and its
+releases must not redistribute them. To make the importable ZIP (or an APK that
+already carries it) from your own prepared folder, run the last command above
+with `--resources <prepared folder>`. It also writes:
+
+- `horizon-resources.zip` — the importable ZIP, for another phone or a fresh
+  install.
+- `horizon-android-arm64-v8a-prepared.zip` — the APK plus that resource ZIP,
+  named a private prepared build.
+
+Keep both private: they contain Mojang's assets and must never be published or
+attached to a release.
+
+Every push to `main` that changes Android files rebuilds the APK and build ZIP
+and refreshes the rolling `android-latest` prerelease. Pushing an `android-v*`
+tag creates a normal versioned release.
 
 ## Layout
 

@@ -108,6 +108,44 @@ def resource_zip(source: Path, output: Path) -> None:
     partial.replace(output)
 
 
+def bundle_readme(abi: str, prepared: bool) -> str:
+    if prepared:
+        return f"""Horizon for Android ({abi}), prepared private build
+
+Install horizon-android-{abi}.apk on an arm64 Android 9 (API 28) or newer
+phone. This archive also carries horizon-resources.zip, prepared from your own
+Minecraft: Java Edition 26.3 copy, so the game starts without an import step.
+
+This bundle contains Mojang's game files: keep it private. Do not publish,
+upload or share it, and do not attach it to a GitHub release.
+"""
+    return f"""Horizon for Android ({abi})
+
+Install horizon-android-{abi}.apk on an arm64 Android 9 (API 28) or newer
+phone. This archive contains no Minecraft code, textures or sounds: prepare the
+26.3 game files from your own copy with horizon-prepare, then import the
+resulting horizon-resources ZIP on Horizon's first screen. See docs/android.md
+in the repository for the exact command.
+
+Do not expect a prepared-resource ZIP here: the repository cannot redistribute
+Mojang's files. Build one for yourself with:
+
+    python3 tools/android_build.py --resources <prepared folder>
+"""
+
+
+def build_zip(apk: Path, output: Path, abi: str, prepared_resources: Path | None = None) -> None:
+    """Package the built APK for a release, optionally with private prepared resources."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    partial = output.with_suffix(".partial")
+    with zipfile.ZipFile(partial, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=1) as archive:
+        archive.write(apk, apk.name)
+        if prepared_resources is not None:
+            archive.write(prepared_resources, prepared_resources.name)
+        archive.writestr("README.txt", bundle_readme(abi, prepared_resources is not None))
+    partial.replace(output)
+
+
 def make_keystore(path: Path) -> None:
     if path.is_file():
         return
@@ -214,6 +252,18 @@ def main() -> None:
     if signer.is_file():
         run([signer, "verify", "--verbose", apk])
     print(f"APK: {apk}")
+
+    archive = args.out / f"horizon-android-{args.abi}.zip"
+    build_zip(apk, archive, args.abi)
+    print(f"Build archive: {archive}")
+
+    if args.resources:
+        exported = args.out / "horizon-resources.zip"
+        shutil.copyfile(bundle, exported)
+        prepared = args.out / f"horizon-android-{args.abi}-prepared.zip"
+        build_zip(apk, prepared, args.abi, exported)
+        print(f"Importable resources: {exported}")
+        print(f"Private prepared build: {prepared} (keep it private; do not publish it)")
 
 
 if __name__ == "__main__":
