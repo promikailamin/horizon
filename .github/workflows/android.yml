@@ -52,12 +52,12 @@ jobs:
         with:
           targets: aarch64-linux-android
 
-      - uses: android-actions/setup-android@v3
-
       - name: Install Android platform, build tools and NDK
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.3.13750724'
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          sdkmanager="$(find "$sdk/cmdline-tools" -name sdkmanager -type f | sort | tail -1)"
+          yes | "$sdkmanager" --licenses > /dev/null || true
+          "$sdkmanager" 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.3.13750724'
 
       - uses: gradle/actions/setup-gradle@v4
         with:
