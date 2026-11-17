@@ -298,3 +298,96 @@ $ cargo build -p horizon-android --target aarch64-linux-android --profile releas
    Compiling android_logger v0.15.1
    Compiling horizon-client-lib v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-client-lib)
    Compiling horizon-android v0.1.0 (/home/runner/work/horizon/horizon/crates/horizon-android)
+    Finished `release` profile [optimized] target(s) in 11m 46s
+$ /usr/bin/keytool -genkeypair -keystore /home/runner/work/horizon/horizon/.local/android/debug.keystore -storepass android -keypass android -alias horizon -keyalg RSA -validity 3650 -dname CN=Horizon Android Development
+Generating 3072-bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 3,650 days
+	for: CN=Horizon Android Development
+$ /tmp/gradle/gradle-8.14/bin/gradle --no-daemon -p /home/runner/work/horizon/horizon/packaging/android -Pabi=arm64-v8a -PminSdk=28 -PversionName=0.1.6 -PversionCode=6 -Pkeystore=/home/runner/work/horizon/horizon/.local/android/debug.keystore assembleRelease
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :preBuild UP-TO-DATE
+> Task :preReleaseBuild UP-TO-DATE
+> Task :mergeReleaseJniLibFolders
+> Task :checkReleaseDuplicateClasses
+> Task :generateReleaseBuildConfig
+> Task :javaPreCompileRelease
+> Task :generateReleaseResValues
+> Task :checkReleaseAarMetadata
+> Task :mapReleaseSourceSetPaths
+> Task :generateReleaseResources
+> Task :packageReleaseResources
+> Task :mergeReleaseNativeLibs
+> Task :mergeReleaseResources
+> Task :createReleaseCompatibleScreenManifests
+> Task :extractDeepLinksRelease
+> Task :parseReleaseLocalResources
+> Task :stripReleaseDebugSymbols
+
+> Task :processReleaseMainManifest
+/home/runner/work/horizon/horizon/packaging/android/AndroidManifest.xml:15:9-41 Warning:
+	android:extractNativeLibs should not be specified in this source AndroidManifest.xml file. See https://d.android.com/guide/topics/manifest/application-element#extractNativeLibs for more information.
+The AGP Upgrade Assistant can remove the attribute from the AndroidManifest.xml file and update the build file accordingly. See https://d.android.com/studio/build/agp-upgrade-assistant for more information.
+
+> Task :extractReleaseNativeSymbolTables
+> Task :processReleaseManifest
+> Task :mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :desugarReleaseFileDependencies
+> Task :mergeReleaseStartupProfile
+> Task :processReleaseManifestForPackage
+> Task :mergeExtDexRelease
+> Task :mergeReleaseArtProfile
+> Task :mergeReleaseShaders
+> Task :compileReleaseShaders NO-SOURCE
+> Task :generateReleaseAssets UP-TO-DATE
+> Task :mergeReleaseAssets
+> Task :compressReleaseAssets
+> Task :extractReleaseVersionControlInfo
+> Task :extractProguardFiles
+> Task :processReleaseJavaRes NO-SOURCE
+> Task :collectReleaseDependencies
+> Task :processReleaseResources
+> Task :mergeReleaseJavaResource
+> Task :sdkReleaseDependencyData
+> Task :compileReleaseJavaWithJavac
+> Task :dexBuilderRelease
+> Task :mergeReleaseGlobalSynthetics
+> Task :mergeDexRelease
+> Task :generateReleaseLintVitalReportModel
+> Task :compileReleaseArtProfile
+> Task :validateSigningRelease
+> Task :writeReleaseAppMetadata
+> Task :writeReleaseSigningConfigVersions
+> Task :optimizeReleaseResources
+> Task :lintVitalAnalyzeRelease
+> Task :lintVitalReportRelease
+> Task :lintVitalRelease
+> Task :packageRelease
+> Task :createReleaseApkListingFileRedirect
+> Task :assembleRelease
+
+[Incubating] Problems report is available at: file:///home/runner/work/horizon/horizon/packaging/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 49s
+47 actionable tasks: 47 executed
+$ /usr/local/lib/android/sdk/build-tools/35.0.0/apksigner verify --verbose /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/usr/local/lib/android/sdk/build-tools/35.0.0/lib/apksigner.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+APK: /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk
+Build archive: /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.zip

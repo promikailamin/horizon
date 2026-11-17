@@ -1,32 +1,26 @@
-Horizon Android local build
-2026-11-17T05:01:17Z
+Horizon Android arm64 build
+2026-11-17T07:20:00Z
 Linux runnervmccnms 7.0.0-1019-azure #20-Ubuntu SMP PREEMPT Mon Oct 19 22:41:16 UTC 2026 x86_64 GNU/Linux
 
--rw-r--r-- 1 runner runner 37M Nov 17 05:01 .local/android/apk/horizon-android-arm64-v8a.apk
-90751ae534d92108c4e9b1898155e6a91781b3913ec2f8208f49e292b5b280e2  .local/android/apk/horizon-android-arm64-v8a.apk
+Release: https://github.com/promikailamin/horizon/releases/tag/android-v0.1.6
+Version: 0.1.6 (versionCode 6)
 
-[Incubating] Problems report is available at: file:///home/runner/work/horizon/horizon/packaging/android/build/reports/problems/problems-report.html
+-rw-r--r-- 1 runner runner 38484197 .local/android/apk/horizon-android-arm64-v8a.apk
+-rw-r--r-- 1 runner runner 38367839 .local/android/apk/horizon-android-arm64-v8a.zip
 
-Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+The ZIP holds the APK and README.txt only. It carries no Minecraft game
+files; a prepared-resource ZIP has to be built from the player's own copy.
 
-You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+sha256:
+a08938305069782240f1949100bd6265993b8422cd9c753f7d35b3f488d8f058  .local/android/apk/horizon-android-arm64-v8a.apk
+52fc544a210384556162ffc8aefcf81256658e026c8beba974e1832afba52f97  .local/android/apk/horizon-android-arm64-v8a.zip
 
-For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+Build command:
+CARGO_TARGET_DIR=$PWD/.local/android-target python3 tools/android_build.py \
+  --abi arm64-v8a --profile release --ndk-version 27.3.13750724 \
+  --build-tools-version 35.0.0 --gradle /tmp/gradle/gradle-8.14/bin/gradle \
+  --java-home /usr/lib/jvm/temurin-21-jdk-amd64 \
+  --version-name 0.1.6 --version-code 6
 
-BUILD SUCCESSFUL in 32s
-47 actionable tasks: 47 executed
-$ /usr/local/lib/android/sdk/build-tools/35.0.0/apksigner verify --verbose /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk
-WARNING: A restricted method in java.lang.System has been called
-WARNING: java.lang.System::loadLibrary has been called by org.conscrypt.NativeLibraryUtil in an unnamed module (file:/usr/local/lib/android/sdk/build-tools/35.0.0/lib/apksigner.jar)
-WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
-WARNING: Restricted methods will be blocked in a future release unless native access is enabled
-
-Verifies
-Verified using v1 scheme (JAR signing): false
-Verified using v2 scheme (APK Signature Scheme v2): true
-Verified using v3 scheme (APK Signature Scheme v3): false
-Verified using v3.1 scheme (APK Signature Scheme v3.1): false
-Verified using v4 scheme (APK Signature Scheme v4): false
-Verified for SourceStamp: false
-Number of signers: 1
-APK: /home/runner/work/horizon/horizon/.local/android/apk/horizon-android-arm64-v8a.apk
+BUILD SUCCESSFUL in 49s (Gradle), cargo 11m 46s
+apksigner verify: Verified using v2 scheme, 1 signer
