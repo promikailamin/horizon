@@ -1,22 +1,22 @@
-pr_ready: 4 files changed since origin/main; checks on local
+pr_ready: 2 files changed since origin/main; checks on local
   Public tree...
   Public tree: pass (1 s)
   Layers...
-  Layers: pass (1 s)
+  Layers: pass (0 s)
   Addresses...
-  Addresses: pass (4 s)
+  Addresses: pass (3 s)
   Python tests...
-  Python tests: pass (1 min 27 s)
-**pr_ready** (`tools/pr_ready.py` on runnervmccnms, against origin/main at e6652423e, 1 min 33 s)
+  Python tests: pass (1 min 13 s)
+**pr_ready** (`tools/pr_ready.py` on runnervmccnms, against origin/main at b60cc9689, 1 min 17 s)
 
 | Check | Result |
 | --- | --- |
-| Scope | ⚠️ 4 files, +709 −90; mixes CI, game |
+| Scope | ⚠️ 2 files, +13 −35; mixes CI, game |
 | Cargo.lock | ✅ unchanged |
 | Public tree | ✅ (1 s) |
-| Layers | ✅ (1 s) |
-| Addresses | ✅ (4 s) |
-| Python tests | ✅ 1003 run, OK (skipped=9) (1 min 27 s) |
+| Layers | ✅ |
+| Addresses | ✅ (3 s) |
+| Python tests | ✅ 1005 run, OK (skipped=9) (1 min 13 s) |
 | rustfmt | ➖ no Rust change |
 | clippy | ➖ no Rust change |
 | tests | ➖ no crate touched |

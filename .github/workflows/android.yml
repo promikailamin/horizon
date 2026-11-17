@@ -1,10 +1,11 @@
 name: android
 
-# Builds the arm64-v8a Horizon APK from this repository and, on an `android-v*`
-# tag or a manual run with `release`, publishes it as a GitHub Release.
-# The APK has no Minecraft code, textures or sounds: a player imports a folder
-# prepared from their own copy (docs/android.md). Do not add Mojang's files to
-# the workflow, the repository or a release.
+# Builds the arm64-v8a Horizon APK and its prepared build ZIP from this
+# repository and, on an `android-v*` tag or a manual run with `release`,
+# publishes them as a GitHub Release.
+# The APK and ZIP have no Minecraft code, textures or sounds: a player imports a
+# folder prepared from their own copy (docs/android.md). Do not add Mojang's
+# files to the workflow, the repository or a release.
 on:
   push:
     branches: [main, android]
@@ -88,6 +89,13 @@ jobs:
             --gradle "$(command -v gradle)" \
             --version-name "$VERSION_NAME" \
             --version-code "$VERSION_CODE"
+
+      - name: The public build ZIP carries no game files
+        run: |
+          if unzip -Z1 .local/android/apk/horizon-android-arm64-v8a.zip \
+              | grep -E '(^|/)([^/]*\.jar|horizon-resources\.zip)$'; then
+            echo "::error::the public build ZIP contains Mojang's files"; exit 1
+          fi
 
       - uses: actions/upload-artifact@v4
         with:
